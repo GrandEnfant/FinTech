@@ -1,0 +1,13 @@
+.episodeCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.episode-number {
+    font-size: 3em;
+    margin: 0 auto;
+}
+
+.episodeTitle {
+    margin: 0 auto;
+}
