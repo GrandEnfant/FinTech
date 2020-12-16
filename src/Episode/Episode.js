@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import style from './style.css'
+import {Popup} from "../Popup/Popup";
 
 
 export const EpisodeCard = ({episodeData, characters}) => {
+    const [isOpen, setOpen] = useState(false)
+    const togglePopup = () => {
+        setOpen(!isOpen);
+    };
 
     const getSrcName = (clickedName) => {
-      let result = characters.filter(obj => (obj.name === clickedName));
-        console.log(result[0].img);
+      let result = characters.find(obj => (obj.name === clickedName));
+        return result.img;
+
     };
 
 
@@ -20,18 +26,18 @@ export const EpisodeCard = ({episodeData, characters}) => {
                 {episodeData.title}
             </div>
             <div className={"episodeCharacters"}>
-                {episodeData.characters.map((item, id) => <button onClick={() => getSrcName(item)}>{item}</button>)}
+                {episodeData.characters.map((item, id) => <a onClick={() => getSrcName(item)}>{item}</a>)}
             </div>
-            {/*<button onClick={togglePopup}>{isOpen?*/}
-            {/*<Popup*/}
-            {/*text='Закрыть'*/}
-            {/*closePopup={togglePopup}*/}
-            {/*>*/}
-            {/*<AboutCharacter character={episodeData}/>*/}
-            {/*</Popup>*/}
-            {/*: null*/}
-            {/*}</button>*/}
-            )}
+            <button onClick={togglePopup}>{isOpen?
+            <Popup
+            text='Закрыть'
+            closePopup={togglePopup}
+            >
+            <AboutCharacter character={episodeData} src={}/>
+            </Popup>
+            : null
+            }</button>
+
         </div>
             );
 };
