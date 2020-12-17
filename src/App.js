@@ -3,14 +3,14 @@ import {useEffect, useState} from "react";
 import {EpisodeCard} from "./Episode/Episode";
 import {Popup} from "./Popup/Popup";
 import {AboutCharacter} from "./AboutCharacter/AboutCharacter";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {changeCharImg} from "./redux/actions";
+import {store} from "./redux/store";
+import {changeStatePopup} from "./redux/actions";
 
-function App() {
+function App({changeCharImg, charImg, changeStatePopup, popupIsOpen}) {
 
-
-const [isOpen, setOpen] = useState(false)
-   const togglePopup = () => {
-        setOpen(!isOpen);
-    };
   const [serial, setSerial] = useState([]);
   const [characters, setCharacters] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -36,8 +36,8 @@ const [isOpen, setOpen] = useState(false)
               })
   }, []);
 console.log(serial);
-console.log(characters)
-
+console.log(characters);
+console.log(popupIsOpen);
 
     const getGroup = (array) =>
     {
@@ -64,20 +64,35 @@ let seasonInformation = getGroup(serial);
     <div className="App">
 
       {collection.map((item, id) => <div key={id} className={"season"}> Season {item[0].season}
-          {item.map((elem, idx) => <EpisodeCard episodeData={elem} characters={characters} key={idx}/>)}
+          {item.map((elem, idx) => <EpisodeCard changeCharImg={changeCharImg} episodeData={elem} characters={characters} key={idx}/>)}
         </div>)}
-          {/*<button onClick={togglePopup}>{isOpen?*/}
-              {/*<Popup*/}
-                  {/*text='Закрыть'*/}
-                  {/*closePopup={togglePopup}*/}
-              {/*>*/}
-                  {/*<AboutCharacter character={elem}/>*/}
-              {/*</Popup>*/}
-              {/*: null*/}
-          {/*}</button>)}*/}
+
+        {popupIsOpen.popupIsOpen?
+            <Popup
+                text='Закрыть'
+                src={charImg}
+                // src={"https://vignette.wikia.nocookie.net/breakingbad/images/b/b7/HankS5.jpg/revision/latest/scale-to-width-down/700?cb=20120620014136"}
+            >
+            </Popup>
+            : null
+        }
     </div>
 
 );
 }
+const mapDispatchToProps = dispatch => {
+    return {
+        changeCharImg: bindActionCreators(changeCharImg, dispatch),
+        changeStatePopup: bindActionCreators(changeStatePopup, dispatch)
+    }
+};
 
-export default App;
+const mapStateToProps = state => {
+    console.log(state);
+    return {
+        charImg: state.charImg,
+        popupIsOpen: state.popupIsOpen
+    }
+};
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+export default ConnectedApp;

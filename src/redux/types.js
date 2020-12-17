@@ -1,0 +1,4 @@
+export const Types = {
+    CHANGE_CHAR_IMG: 'CHANGE_CHAR_IMG',
+    CHANGE_STATE_POPUP: 'CHANGE_STATE_POPUP'
+};

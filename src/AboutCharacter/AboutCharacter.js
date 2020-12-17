@@ -3,10 +3,6 @@ import style from './style.css'
 
 
 export const AboutCharacter = ({character, src}) => {
-    console.log(character);
-    console.log(character);
-    console.log(character);
-    console.log(character);
 
 
     return(
