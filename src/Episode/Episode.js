@@ -1,4 +1,5 @@
 import React from 'react';
+import style from './style.css'
 
 
 export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen, changeStatePopup}) => {
@@ -22,8 +23,8 @@ export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen
             <div className={"episodeTitle"}>
                 {episodeData.title}
             </div>
-            <div className={"episodeCharacters"}>
-                {episodeData.characters.map((item, id) => <a onClick={() => getSrcName(item)}>{item}</a>)}
+            <div className={"episodeCharacters"}><ul>
+                {episodeData.characters.map((item, id) => <li><a onClick={() => getSrcName(item)}>{item}</a></li>)}</ul>
             </div>
 
         </div>

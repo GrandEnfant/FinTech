@@ -1,6 +1,9 @@
 .episodeCard {
     display: flex;
     flex-direction: column;
+    margin: 30px;
+    border: 1px solid gray;
+    padding: 15px;
 }
 
 .episode-number {
@@ -10,4 +13,8 @@
 
 .episodeTitle {
     margin: 0 auto;
+}
+
+a {
+    padding: 3px
 }
