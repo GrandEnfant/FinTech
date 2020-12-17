@@ -1,11 +1,4 @@
-import React, {useState} from 'react';
-import style from './style.css'
-import {Popup} from "../Popup/Popup";
-import {AboutCharacter} from "../AboutCharacter/AboutCharacter";
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
-import {store} from "../redux/store";
-import {changeStatePopup} from "../redux/actions";
+import React from 'react';
 
 
 export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen, changeStatePopup}) => {
@@ -16,8 +9,7 @@ export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen
       let result = characters.find(obj => (obj.name === clickedName));
       let srcImg = result.img;
       changeCharImg(srcImg);
-      changeStatePopup.changeStatePopup();
-      console.log(popupIsOpen);
+      changeStatePopup();
     };
 
 
@@ -38,17 +30,3 @@ export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen
             );
 
 };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         changeCharImg: bindActionCreators(changeCharImg, dispatch),
-//
-//     }
-// };
-//
-// const mapStateToProps = state => {
-//     return {
-//         charImg: state.charImg,
-//     }
-// };
-// export default connect(mapStateToProps, mapDispatchToProps)(EpisodeCard)

@@ -16,13 +16,11 @@ export const charImgReducer = (state = imgInitialState, action) => {
     }
 };
 
-
-
 export const statePopupReducer = (state = statusPopupInitial, action) => {
     switch (action.type) {
         case Types.CHANGE_STATE_POPUP: {
             let copiedState = state;
-            copiedState.popupIsOpen = !state.popupIsOpen;
+            copiedState.popupIsOpen = !action.payload;
             return {...copiedState}
         }
         default: return state;

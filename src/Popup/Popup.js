@@ -2,14 +2,13 @@ import React from 'react';
 import style from './style.css'
 
 
-export const Popup = ({closePopup, charImg}) => {
-
+export const Popup = ({closePopup, src}) => {
+    console.log(closePopup);
     return(
         <React.Fragment>
             <div className='popup'>
                 <div className='popup_inner'>
-                    <img src={charImg} />
-              {/*<img src="https://vignette.wikia.nocookie.net/breakingbad/images/b/b7/HankS5.jpg/revision/latest/scale-to-width-down/700?cb=20120620014136"/>*/}
+                    <img className={"img"} src={src} />
                     <button onClick={closePopup}>Закрыть</button>
                 </div>
             </div>
