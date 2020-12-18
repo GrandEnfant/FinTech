@@ -8,9 +8,12 @@ export const EpisodeCard = ({episodeData, characters, changeCharImg, popupIsOpen
 
     const getSrcName = (clickedName) => {
       let result = characters.find(obj => (obj.name === clickedName));
-      let srcImg = result.img;
-      changeCharImg(srcImg);
-      changeStatePopup();
+
+        if(result !== undefined) {
+            let srcImg = result.img;
+            changeCharImg(srcImg);
+            changeStatePopup();
+      };
     };
 
 
