@@ -5,44 +5,47 @@ import {Popup} from "./Popup/Popup";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {changeCharImg} from "./redux/actions";
-import {store} from "./redux/store";
 import {changeStatePopup} from "./redux/actions";
+import {changeSerialData} from "./redux/actions";
+
 
 function App({
                  changeCharImg,
                  charImg,
                  changeStatePopup,
-                 popupIsOpen
+                 popupIsOpen,
+                 dataSerial
              }) {
 
     const [serial, setSerial] = useState([]);
     const [characters, setCharacters] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState();
 
-    useEffect(() => {
-        fetch("https://breakingbadapi.com/api/episodes?series=Breaking+Bad")
-            .then(res => res.json())
-            .then((result) => {
-                    setIsLoaded(true);
-                    setSerial(result)
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                });
-        fetch("https://breakingbadapi.com/api/characters")
-            .then(res => res.json())
-            .then((result) => {
-                    setIsLoaded(true);
-                    setCharacters(result)
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                })
-    }, []);
+    fetch("https://breakingbadapi.com/api/episodes?series=Breaking+Bad")
+        .then(res => res.json())
+        .then((result) => {
+                console.log(result);
+                changeSerialData(result);
+                console.log(dataSerial);
+                // setIsLoaded(true);
+            },
+            (error) => {
+                // setIsLoaded(true);
+                setError(error);
+            });
+    fetch("https://breakingbadapi.com/api/characters")
+        .then(res => res.json())
+        .then((result) => {
+                setCharacters(result);
+                // setIsLoaded(true);
+            },
+            (error) => {
+                // setIsLoaded(true);
+                setError(error);
+            });
 
+    console.log(dataSerial);
     const getGroup = (array) => {
         let mapCollection = new Map();
         let objTemp = {};
@@ -51,6 +54,9 @@ function App({
         let arrTempSeason = values.map(e => e[0].season).forEach((e, i) => mapCollection.set(e, arrTempEpisode[i]))
         return mapCollection;
     };
+    // useEffect(() => {
+    //     console.log(dataSerial)
+    // }, []);
 
     let seasonInformation = getGroup(serial);
 
@@ -64,7 +70,8 @@ function App({
     const collection = func(seasonInformation);
     return (
         <div className="App">
-
+            {dataSerial ? <div> loading... </div> :
+                <div>
             {collection.map((item, id) => <div key={id} className={"season"}> Season {item[0].season}
                 {item.map((elem, idx) => <EpisodeCard changeCharImg={changeCharImg}
                                                       episodeData={elem}
@@ -73,6 +80,7 @@ function App({
                                                       popupIsOpen={popupIsOpen.popupIsOpen}
                                                       key={idx}/>)}
             </div>)}
+                </div>}
 
             {popupIsOpen.popupIsOpen ?
                 <Popup
@@ -90,13 +98,15 @@ function App({
 const mapStateToProps = state => {
     return {
         charImg: state.charImg,
-        popupIsOpen: state.popupIsOpen
+        popupIsOpen: state.popupIsOpen,
+        dataSerial: state.dataSerial
     }
 };
 const mapDispatchToProps = dispatch => {
     return {
         changeCharImg: bindActionCreators(changeCharImg, dispatch),
-        changeStatePopup: bindActionCreators(changeStatePopup, dispatch)
+        changeStatePopup: bindActionCreators(changeStatePopup, dispatch),
+        changeSerialData: bindActionCreators(changeSerialData, dispatch),
     }
 };
 

@@ -3,7 +3,6 @@ import style from './style.css'
 
 
 export const Popup = ({closePopup, src}) => {
-    console.log(closePopup);
     return(
         <React.Fragment>
             <div className='popup'>
@@ -12,12 +11,8 @@ export const Popup = ({closePopup, src}) => {
                     <button onClick={closePopup}>Закрыть</button>
                 </div>
             </div>
-
-
         </React.Fragment>
 
     )
-
-
 
 };

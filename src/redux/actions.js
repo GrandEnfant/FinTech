@@ -14,3 +14,11 @@ export function changeStatePopup(isOpen) {
         payload: isOpen
     }
 }
+
+
+export function changeSerialData(data) {
+    return {
+        type: Types.CHANGE_SERIAL_DATA,
+        payload: data
+    }
+}
