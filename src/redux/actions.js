@@ -16,9 +16,9 @@ export function changeStatePopup(isOpen) {
 }
 
 
-export function changeSerialData(data) {
+export function changeSerialData(dataSerial) {
     return {
         type: Types.CHANGE_SERIAL_DATA,
-        payload: data
+        payload: {data: dataSerial}
     }
 }

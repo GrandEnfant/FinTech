@@ -31,12 +31,10 @@ export const statePopupReducer = (state = statusPopupInitial, action) => {
 
 
 export const dataSerialReducer = (state = DataSerialInitial, action) => {
-
     switch (action.type) {
         case Types.CHANGE_SERIAL_DATA: {
             let copiedState = state;
-            copiedState.dataSerial = action.payload;
-            console.log('tut');
+            copiedState = action.payload;
             return {...copiedState}
         }
         default: return state;

@@ -14,7 +14,8 @@ function App({
                  charImg,
                  changeStatePopup,
                  popupIsOpen,
-                 dataSerial
+                 dataSerial,
+                 changeSerialData
              }) {
 
     const [serial, setSerial] = useState([]);
@@ -22,64 +23,59 @@ function App({
     const [isLoaded, setIsLoaded] = useState(false);
     const [error, setError] = useState();
 
+useEffect(() => {
     fetch("https://breakingbadapi.com/api/episodes?series=Breaking+Bad")
         .then(res => res.json())
         .then((result) => {
-                console.log(result);
-                changeSerialData(result);
-                console.log(dataSerial);
-                // setIsLoaded(true);
-            },
-            (error) => {
-                // setIsLoaded(true);
-                setError(error);
-            });
-    fetch("https://breakingbadapi.com/api/characters")
-        .then(res => res.json())
-        .then((result) => {
-                setCharacters(result);
-                // setIsLoaded(true);
-            },
-            (error) => {
-                // setIsLoaded(true);
-                setError(error);
-            });
+            changeSerialData(result);
+        }).then(() => {
+        setIsLoaded(true);
+    })
+        .catch((error)=> {
+            setIsLoaded(false);
+            setError(error);
+        });
+    console.log('rerendered')
+}, [dataSerial.dataSerial]);
 
-    console.log(dataSerial);
     const getGroup = (array) => {
-        let mapCollection = new Map();
-        let objTemp = {};
-        let values = array.map((el, idx) => array.filter(elem => +elem.season === +array[idx].season));
-        let arrTempEpisode = values.map(e => e.map(el => el));
-        let arrTempSeason = values.map(e => e[0].season).forEach((e, i) => mapCollection.set(e, arrTempEpisode[i]))
-        return mapCollection;
-    };
-    // useEffect(() => {
-    //     console.log(dataSerial)
-    // }, []);
-
-    let seasonInformation = getGroup(serial);
-
-    const func = seasonInformation => {
-        const collection = [];
-        for (let i = 1; i <= seasonInformation.size; i++) {
-            collection.push(seasonInformation.get(String(i)))
+        if(array.data !== undefined) {
+            console.log(array);
+            console.log(array);
+            console.log(array);
+            let mapCollection = new Map();
+            let objTemp = {};
+            let values = array.data.map((el, idx) => array.data.filter(elem => +elem.season === +array.data[idx].season));
+            let arrTempEpisode = values.map(e => e.map(el => el));
+            let arrTempSeason = values.map(e => e[0].season).forEach((e, i) => mapCollection.set(e, arrTempEpisode[i]));
+            const collection = [];
+            for (let i = 1; i <= mapCollection.size; i++) {
+                collection.push(mapCollection.get(String(i)))
+            }
+            return collection;
         }
-        return collection
     };
-    const collection = func(seasonInformation);
+
+
+        const dataSerialGroup = getGroup(dataSerial);
+
+
+    console.log(dataSerialGroup);
+
     return (
         <div className="App">
-            {dataSerial ? <div> loading... </div> :
+            {!!error && error}
+            {!isLoaded ? <div> loading... </div> :
                 <div>
-            {collection.map((item, id) => <div key={id} className={"season"}> Season {item[0].season}
-                {item.map((elem, idx) => <EpisodeCard changeCharImg={changeCharImg}
-                                                      episodeData={elem}
-                                                      characters={characters}
-                                                      changeStatePopup={changeStatePopup}
-                                                      popupIsOpen={popupIsOpen.popupIsOpen}
-                                                      key={idx}/>)}
-            </div>)}
+
+                    {dataSerialGroup.map((item, id) => <div key={id} className={"season"}> Season {item.season}
+                {/*{item.map((elem, idx) => <EpisodeCard changeCharImg={changeCharImg}*/}
+                                                      {/*episodeData={elem}*/}
+                                                      {/*characters={characters}*/}
+                                                      {/*changeStatePopup={changeStatePopup}*/}
+                                                      {/*popupIsOpen={popupIsOpen.popupIsOpen}*/}
+                                                      {/*key={idx}/>)}*/}
+            {/*</div>)}*/}
                 </div>}
 
             {popupIsOpen.popupIsOpen ?
