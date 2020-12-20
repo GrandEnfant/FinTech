@@ -1,87 +1,83 @@
 import './App.css';
+import React from 'react';
 import {useEffect, useState} from "react";
-import {EpisodeCard} from "./Episode/Episode";
 import {Popup} from "./Popup/Popup";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {changeCharImg} from "./redux/actions";
-import {changeStatePopup} from "./redux/actions";
-import {changeSerialData} from "./redux/actions";
-
+import {changeStatePopup, changeSerialData, changeCharactersData, changeCharacterPhoto} from "./redux/actions";
+const SeasonList = React.lazy(() => import("./SeasonList/SeasonList"));
 
 function App({
                  changeCharImg,
-                 charImg,
+                 characterPhoto,
                  changeStatePopup,
                  popupIsOpen,
                  dataSerial,
-                 changeSerialData
+                 changeSerialData,
+                 changeCharactersData,
+                 dataCharacters
              }) {
 
-    const [serial, setSerial] = useState([]);
-    const [characters, setCharacters] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [error, setError] = useState();
 
-useEffect(() => {
-    fetch("https://breakingbadapi.com/api/episodes?series=Breaking+Bad")
-        .then(res => res.json())
-        .then((result) => {
-            changeSerialData(result);
-        }).then(() => {
-        setIsLoaded(true);
-    })
-        .catch((error)=> {
-            setIsLoaded(false);
-            setError(error);
-        });
-    console.log('rerendered')
-}, [dataSerial.dataSerial]);
+    useEffect(() => {
+        fetch("https://breakingbadapi.com/api/episodes?series=Breaking+Bad")
+            .then(res => res.json())
+            .then((result) => {
+                changeSerialData(result);
+            }).then(() => {
+            setIsLoaded(true);
+        })
+            .catch((error) => {
+                setIsLoaded(false);
+                setError(error);
+            });
+        fetch("https://breakingbadapi.com/api/characters")
+            .then(res => res.json())
+            .then((result) => {
+                changeCharactersData(result);
+            }).then(() => {
+            setIsLoaded(true);
+        })
+            .catch((error) => {
+                setIsLoaded(false);
+                setError(error);
+            });
+    }, [dataSerial.dataSerial]);
 
-    const getGroup = (array) => {
-        if(array.data !== undefined) {
-            console.log(array);
-            console.log(array);
-            console.log(array);
+    const groupBySeason = (array) => {
+        if (array.data !== undefined) {
             let mapCollection = new Map();
-            let objTemp = {};
-            let values = array.data.map((el, idx) => array.data.filter(elem => +elem.season === +array.data[idx].season));
-            let arrTempEpisode = values.map(e => e.map(el => el));
-            let arrTempSeason = values.map(e => e[0].season).forEach((e, i) => mapCollection.set(e, arrTempEpisode[i]));
-            const collection = [];
+            let filteredSeason = array.data.map((el, idx) => array.data.filter(elem => +elem.season === +array.data[idx].season));
+            let arrTempEpisode = filteredSeason.map(e => e.map(el => el));
+            let arrTempSeason = filteredSeason.map(e => e[0].season).forEach((e, i) => mapCollection.set(e, arrTempEpisode[i]));
+            const groupedEpisodes = [];
             for (let i = 1; i <= mapCollection.size; i++) {
-                collection.push(mapCollection.get(String(i)))
+                groupedEpisodes.push(mapCollection.get(String(i)))
             }
-            return collection;
+            return groupedEpisodes;
         }
     };
-
-
-        const dataSerialGroup = getGroup(dataSerial);
-
-
-    console.log(dataSerialGroup);
+    const groupedEpisodes = groupBySeason(dataSerial);
 
     return (
         <div className="App">
             {!!error && error}
             {!isLoaded ? <div> loading... </div> :
+                <React.Suspense fallback={<div>Loading...</div>}>
                 <div>
-
-                    {dataSerialGroup.map((item, id) => <div key={id} className={"season"}> Season {item.season}
-                {/*{item.map((elem, idx) => <EpisodeCard changeCharImg={changeCharImg}*/}
-                                                      {/*episodeData={elem}*/}
-                                                      {/*characters={characters}*/}
-                                                      {/*changeStatePopup={changeStatePopup}*/}
-                                                      {/*popupIsOpen={popupIsOpen.popupIsOpen}*/}
-                                                      {/*key={idx}/>)}*/}
-            {/*</div>)}*/}
-                </div>}
-
-            {popupIsOpen.popupIsOpen ?
+                    {groupedEpisodes.map((item, id) =>
+                             <SeasonList key={id} numberSeason={id} item={item} changeCharImg={changeCharImg} dataCharacters={dataCharacters}
+                                    changeStatePopup={changeStatePopup} popupIsOpen={popupIsOpen}/>
+                    )}
+                </div>
+                </React.Suspense>
+                    }
+                      {popupIsOpen.popupIsOpen ?
                 <Popup
                     text='Закрыть'
-                    src={charImg.charImg}
+                    src={characterPhoto.characterPhoto}
                     closePopup={changeStatePopup}
                 >
                 </Popup>
@@ -91,18 +87,21 @@ useEffect(() => {
 
     );
 }
+
 const mapStateToProps = state => {
     return {
-        charImg: state.charImg,
+        characterPhoto: state.characterPhoto,
         popupIsOpen: state.popupIsOpen,
-        dataSerial: state.dataSerial
+        dataSerial: state.dataSerial,
+        dataCharacters: state.dataCharacters
     }
 };
 const mapDispatchToProps = dispatch => {
     return {
-        changeCharImg: bindActionCreators(changeCharImg, dispatch),
+        changeCharImg: bindActionCreators(changeCharacterPhoto, dispatch),
         changeStatePopup: bindActionCreators(changeStatePopup, dispatch),
         changeSerialData: bindActionCreators(changeSerialData, dispatch),
+        changeCharactersData: bindActionCreators(changeCharactersData, dispatch)
     }
 };
 

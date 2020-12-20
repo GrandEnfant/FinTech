@@ -1,18 +1,16 @@
 import React from 'react';
-import style from './style.css'
-
+import './style.css';
+import closeBtn from './close_img.png'
 
 export const Popup = ({closePopup, src}) => {
-    return(
+    return (
         <React.Fragment>
             <div className='popup'>
                 <div className='popup_inner'>
-                    <img className={"img"} src={src} />
-                    <button onClick={closePopup}>Закрыть</button>
+                    <button className={'close-btn'} onClick={closePopup}> <img alt={'Закрыть'} src={closeBtn}/></button>
+                    <img className={"img"} src={src}/>
                 </div>
             </div>
         </React.Fragment>
-
     )
-
 };

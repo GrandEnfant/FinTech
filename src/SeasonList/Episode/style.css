@@ -1,0 +1,16 @@
+.episode-card {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    border: 1px solid black;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+.episode-number {
+    font-size: 2em;
+}
+
+.episode-title {
+    margin: 10px auto;
+}

@@ -1,0 +1,10 @@
+.season {
+   border: 1px solid gray;
+   flex-wrap: wrap;
+}
+
+.title {
+   display: block;
+   text-align: center;
+   padding: 10px;
+}

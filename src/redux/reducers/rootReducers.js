@@ -1,11 +1,10 @@
 
 import {combineReducers} from 'redux';
-import {charImgReducer} from "./reducers";
-import {statePopupReducer} from "./reducers";
-import {dataSerialReducer} from "./reducers";
+import {characterPhotoReducer, dataCharactersReducer, statePopupReducer, dataSerialReducer} from "./reducers";
 
 export const rootReducer = combineReducers({
-    charImg: charImgReducer,
+    characterPhoto: characterPhotoReducer,
     popupIsOpen: statePopupReducer,
-    dataSerial: dataSerialReducer
+    dataSerial: dataSerialReducer,
+    dataCharacters: dataCharactersReducer
 });
